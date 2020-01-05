@@ -43,89 +43,9 @@ class DateBase {
         int day, month, year;
     };
 
-    std::map<Date, std::set<std::string>> data;
+
 
 };
-
-DateBase::Date::Date() : day(0), month(0), year(0) {}
-
-DateBase::Date::Date(std::string& date) {
-    for (auto ch : date) {
-        if (ch != '-' && ch != '+' && !isdigit(ch)) {
-            throw std::invalid_argument("Wrong date format: " + date);
-        }
-    }
-    int beg = 0, end = 0;
-    for (int i = 1; i < date.size(); ++i) {
-        if (date[i] == '-') {
-            beg = i;
-            break;
-        }
-    }
-    for (int i = static_cast<int>(date.size()) - 1; i >= 0; --i) {
-        if (date[i] == '-') {
-            end = i;
-            if (i > 0 && date[i - 1] == '-') {
-                end = i - 1;
-            }
-            break;
-        }
-    }
-    if (beg >= end) {
-        throw std::invalid_argument("Wrong date format: " + date);
-    }
-    try {
-        year = std::stoi(date.substr(0, beg));
-        month = std::stoi(date.substr(beg + 1, end));
-        day = std::stoi(date.substr(end + 1, date.size()));
-    } catch (...) {
-        throw std::invalid_argument("Wrong date format: " + date);
-    }
-    if (month <= 0 || month > 12) {
-        throw std::invalid_argument("Month value is invalid: " + std::to_string(month));
-    }
-    if (day <= 0 || day > 31) {
-        throw std::invalid_argument("Day value is invalid: " + std::to_string(day));
-    }
-}
-
-bool DateBase::Date::operator<(const DateBase::Date& rhs) const {
-    if (this->year == rhs.year) {
-        if (this->month == rhs.month) {
-            return this->day < rhs.day;
-        } else {
-            return this->month < rhs.month;
-        }
-    } else {
-        return this->year < rhs.year;
-    }
-}
-
-bool DateBase::Date::operator==(const DateBase::Date& rhs) const {
-    return ((this->year == rhs.year) && (this->month == rhs.month) && (this->day == rhs.day));
-}
-
-std::string DateBase::Date::GetDate() const {
-    std::string res;
-    std::string y_s, m_s, d_s;
-    y_s = std::to_string(year);
-    m_s = std::to_string(month);
-    d_s = std::to_string(day);
-
-    for(int i = y_s.size(); i < 4; ++i) {
-        res += '0';
-    }
-    res += y_s + '-';
-    if (m_s.size() == 1) {
-        res += '0';
-    }
-    res += m_s + '-';
-    if (d_s.size() == 1) {
-        res += '0';
-    }
-    res += d_s;
-    return res;
-}
 
 int main() {
     DateBase DB;
