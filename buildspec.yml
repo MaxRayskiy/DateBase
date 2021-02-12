@@ -1,0 +1,30 @@
+language: c++
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cd ..
+script:
+  - cmake --build build
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.9
+    packages:
+      - g++-4.9
+      - clang-3.9
+    update: true
+  homebrew:
+    packages:
+      - ccache
+      - gcc@4.9
+      - llvm@4
+    update: true
